@@ -32,15 +32,11 @@ Lumina 透過 AI + Figma Plugin，協助你直接「閱讀」設計檔。
 
 ### 解釋目前選取畫面
 
-<!-- TODO: 放入 selection explanation demo 影片連結或 GIF -->
+https://github.com/user-attachments/assets/a22e4a74-9a87-47f6-b40f-f607b01d8a0d
 
-### 整份檔案總覽
+### 主題式搜尋
 
-<!-- TODO: 放入 file overview demo 影片連結或 GIF -->
-
-### 主題式 Flow 搜尋
-
-<!-- TODO: 放入 topic search demo 影片連結或 GIF -->
+https://github.com/user-attachments/assets/060818ed-4f40-4fef-a3c6-7018fc288bde
 
 ## 可以問哪些問題？
 

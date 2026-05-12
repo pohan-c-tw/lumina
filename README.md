@@ -32,15 +32,11 @@ You do not need to know where a screen is. You only need to ask a question.
 
 ### Current Selection Explanation
 
-<!-- TODO: Add selection explanation demo video or GIF -->
+https://github.com/user-attachments/assets/a22e4a74-9a87-47f6-b40f-f607b01d8a0d
 
-### Full File Overview
+### Topic-Based Search
 
-<!-- TODO: Add file overview demo video or GIF -->
-
-### Topic-Based Flow Search
-
-<!-- TODO: Add topic search demo video or GIF -->
+https://github.com/user-attachments/assets/060818ed-4f40-4fef-a3c6-7018fc288bde
 
 ## Example Questions
 
