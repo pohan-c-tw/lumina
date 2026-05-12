@@ -1,0 +1,24 @@
+{
+  "name": "@lumina/shared",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./agentProtocol": {
+      "types": "./dist/agentProtocol.d.ts",
+      "import": "./dist/agentProtocol.js"
+    },
+    "./agentTools": {
+      "types": "./dist/agentTools.d.ts",
+      "import": "./dist/agentTools.js"
+    },
+    "./snapshots": {
+      "types": "./dist/snapshots.d.ts",
+      "import": "./dist/snapshots.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "package:fix": "sort-package-json",
+    "type:check": "tsc --noEmit"
+  }
+}

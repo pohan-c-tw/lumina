@@ -1,0 +1,33 @@
+{
+  "name": "@lumina/plugin",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "npm run build:main && npm run build:ui",
+    "build:main": "vite build --config vite.config.main.ts",
+    "build:ui": "vite build --config vite.config.ui.ts",
+    "dev:main": "vite build --watch --config vite.config.main.ts",
+    "dev:ui": "vite build --watch --config vite.config.ui.ts",
+    "package:fix": "sort-package-json",
+    "type:check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@lumina/shared": "file:../../packages/shared",
+    "clsx": "^2.1.1",
+    "react": "^19.2.1",
+    "react-dom": "^19.2.1",
+    "react-markdown": "^10.1.0",
+    "uuid": "^13.0.0"
+  },
+  "devDependencies": {
+    "@figma/plugin-typings": "^1.121.0",
+    "@tailwindcss/vite": "^4.1.17",
+    "@types/node": "^24.10.2",
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react-swc": "^4.2.2",
+    "tailwindcss": "^4.1.17",
+    "vite": "^7.2.7",
+    "vite-plugin-singlefile": "^2.3.0"
+  }
+}

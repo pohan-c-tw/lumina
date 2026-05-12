@@ -1,0 +1,40 @@
+{
+  "name": "lumina",
+  "version": "1.0.0",
+  "private": true,
+  "description": "",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "check": "npm run format:check && npm run lint:check && npm run style:check && npm run type:check",
+    "fix": "npm run format:fix && npm run lint:fix && npm run package:fix && npm run style:fix",
+    "dev:plugin:main": "npm run dev:main --workspace @lumina/plugin",
+    "dev:plugin:ui": "npm run dev:ui --workspace @lumina/plugin",
+    "dev:server": "npm run dev --workspace @lumina/server",
+    "format:check": "prettier \"**/*.{css,html,js,jsx,md,ts,tsx}\" --check",
+    "format:fix": "prettier \"**/*.{css,html,js,jsx,md,ts,tsx}\" --write",
+    "lint:check": "eslint \"**/*.{ts,tsx}\"",
+    "lint:fix": "eslint \"**/*.{ts,tsx}\" --fix",
+    "package:fix": "npm run package:fix --workspaces --if-present",
+    "style:check": "stylelint \"**/*.{css,scss}\"",
+    "style:fix": "stylelint \"**/*.{css,scss}\" --fix",
+    "type:check": "npm run type:check --workspaces --if-present"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.1",
+    "eslint": "^9.39.2",
+    "eslint-import-resolver-typescript": "^4.4.4",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "prettier": "^3.7.4",
+    "prettier-plugin-tailwindcss": "^0.7.2",
+    "sort-package-json": "^3.5.1",
+    "stylelint": "^16.26.1",
+    "stylelint-config-recess-order": "^7.4.0",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.49.0"
+  }
+}
