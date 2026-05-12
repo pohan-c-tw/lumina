@@ -1,52 +1,70 @@
 # Lumina
 
-> 專為 Figma 設計檔打造的對話式 AI 助理
+English | [繁體中文](./README.zh-TW.md)
 
-Lumina 讓你可以直接用自然語言理解大型 Figma 設計檔，而不用手動翻找數十個 Page、Frame 與 Flow。
+> A conversational AI assistant built for understanding Figma design files
 
-它的定位不是生成 UI，而是作為你的「設計檔案導覽員」：
+Lumina lets you understand large Figma files with natural language, without manually digging through dozens of pages, frames, and flows.
 
-- 解釋目前畫面的使用流程
-- 整理整份產品設計檔的架構
-- 區分 Happy Path / Error Path
-- 依主題搜尋相關畫面與流程
+It is not positioned as a UI generation tool. Instead, it acts as a guide for reading and navigating design files:
 
-## 為什麼需要 Lumina？
+- Explain the user flow of the currently selected screen
+- Summarize the structure of an entire product design file
+- Distinguish happy paths from error paths
+- Search for screens and flows related to a specific topic
 
-大型 Figma 檔案通常會遇到這些問題：
+## Why Lumina?
 
-- Flow 分散在不同 Page
-- 畫面命名不一致
-- 新成員 onboarding 成本高
-- PM / Engineer 很難快速理解完整產品流程
+Large Figma files often come with these problems:
 
-Lumina 透過 AI + Figma Plugin，協助你直接「閱讀」設計檔。
+- Flows are scattered across different pages
+- Screen names are inconsistent
+- New team member onboarding is expensive
+- PMs and engineers struggle to quickly understand the full product flow
 
-你不需要知道畫面在哪，只需要提出問題。
+Lumina combines AI with a Figma plugin to help you directly "read" a design file.
 
-## 可以問哪些問題？
+You do not need to know where a screen is. You only need to ask a question.
 
-| 使用情境                | 範例問題                                    |
-| ----------------------- | ------------------------------------------- |
-| 解釋目前選取畫面        | 請解釋目前選取的畫面，整理成流程步驟        |
-| 區分 Happy / Error Path | 幫我指出目前畫面的 Happy Path 與 Error Path |
-| 整份檔案產品總覽        | 這個 Figma 檔案在做什麼？有哪些主要流程？   |
-| 語意搜尋特定主題        | 幫我找整個檔案裡跟 subscription 相關的畫面  |
-| 快速 onboarding         | 新工程師需要先理解哪些核心流程？            |
+## Demo
 
-## 架構總覽
+> Demo video placeholders. These can later be replaced with Loom, YouTube, GitHub asset links, or GIFs.
 
-Lumina 的核心由三個部分組成：
+### Current Selection Explanation
 
-- **Plugin UI**：React 聊天介面，負責接收使用者問題並顯示回答
-- **Plugin Main**：Figma Plugin Sandbox，負責呼叫 Server 與讀取 Figma API
-- **Server**：Node.js + Express，負責 Planner、Agent 流程控制與 OpenAI API 呼叫
+<!-- TODO: Add selection explanation demo video or GIF -->
 
-依照 Planner 判斷結果，對話流程會分成兩種：不需要 tool call，以及需要 tool call。
+### Full File Overview
 
-### 不需要 tool call
+<!-- TODO: Add file overview demo video or GIF -->
 
-當使用者問題不需要讀取 Figma 檔案資料時，Server 會直接呼叫 Main Agent 產生回答。
+### Topic-Based Flow Search
+
+<!-- TODO: Add topic search demo video or GIF -->
+
+## Example Questions
+
+| Use case                        | Example question                                                     |
+| ------------------------------- | -------------------------------------------------------------------- |
+| Explain the current selection   | Please explain the selected screen and organize it into flow steps   |
+| Distinguish happy / error paths | Help me identify the happy path and error path in the current screen |
+| Full file product overview      | What is this Figma file about? What are the main flows?              |
+| Semantic topic search           | Find screens related to subscription across the entire file          |
+| Fast onboarding                 | Which core flows should a new engineer understand first?             |
+
+## Architecture Overview
+
+Lumina is composed of three main parts:
+
+- **Plugin UI**: A React chat interface that receives user questions and displays responses
+- **Plugin Main**: The Figma Plugin Sandbox layer that calls the server and reads the Figma API
+- **Server**: A Node.js + Express server that handles the planner, agent runtime, and OpenAI API calls
+
+Depending on the planner's decision, a conversation can follow one of two paths: without a tool call, or with a tool call.
+
+### Without Tool Call
+
+When the user's question does not require reading Figma file data, the server directly calls the main agent to generate a response.
 
 ```mermaid
 sequenceDiagram
@@ -58,19 +76,19 @@ sequenceDiagram
   participant Planner as Planner (gpt-4.1-mini)
   participant Agent as Main Agent (gpt-4.1)
 
-  UI->>Main: 使用者輸入問題
+  UI->>Main: User enters a question
   Main->>Server: POST /agent
-  Server->>Planner: 判斷是否需要 Figma 工具
-  Planner-->>Server: 不需要 tool call
-  Server->>Agent: 直接產生回答
-  Agent-->>Server: 中文說明
-  Server-->>Main: 回傳回答
-  Main-->>UI: 顯示回答
+  Server->>Planner: Decide whether Figma tools are needed
+  Planner-->>Server: No tool call needed
+  Server->>Agent: Generate response directly
+  Agent-->>Server: Chinese explanation
+  Server-->>Main: Return response
+  Main-->>UI: Display response
 ```
 
-### 需要 tool call
+### With Tool Call
 
-當使用者問題需要讀取目前選取畫面或掃描整份 Figma 檔案時，Server 會先回傳 tool call 給 Plugin Main，由 Plugin Main 執行 Figma API 後，再把 snapshot 送回 Server。
+When the user's question requires reading the current selection or scanning the full Figma file, the server first returns a tool call to Plugin Main. Plugin Main then executes the Figma API and sends the resulting snapshot back to the server.
 
 ```mermaid
 sequenceDiagram
@@ -82,92 +100,92 @@ sequenceDiagram
   participant Planner as Planner (gpt-4.1-mini)
   participant Agent as Main Agent (gpt-4.1)
 
-  UI->>Main: 使用者輸入問題
+  UI->>Main: User enters a question
   Main->>Server: POST /agent
-  Server->>Planner: 判斷需要哪些 Figma 工具
-  Planner-->>Server: 回傳 tool_call
-  Server-->>Main: 回傳 tool_call
-  Main->>Main: 執行 Figma API，產生 snapshot
-  Main->>Server: POST /agent/tools，送回 snapshot
-  Server->>Agent: 根據 snapshot 產生回答
-  Agent-->>Server: 中文說明
-  Server-->>Main: 回傳回答
-  Main-->>UI: 顯示回答
+  Server->>Planner: Decide which Figma tools are needed
+  Planner-->>Server: Return tool_call
+  Server-->>Main: Return tool_call
+  Main->>Main: Execute Figma API and create snapshot
+  Main->>Server: POST /agent/tools with snapshot
+  Server->>Agent: Generate response from snapshot
+  Agent-->>Server: Chinese explanation
+  Server-->>Main: Return response
+  Main-->>UI: Display response
 ```
 
 ## Figma Tools
 
-Lumina 目前提供兩個核心 Figma 工具：
+Lumina currently provides two core Figma tools:
 
-- **`getCurrentSelectionSnapshot`** — 讀取目前選取的 Frame，回傳節點名稱、類型、文字片段與基本結構資訊，適合用於畫面解釋、流程分析、Happy Path / Error Path 拆解。
-- **`scanFileOverview`** — 掃描整個檔案的 Page / Frame，產生結構化總覽，適合用於產品總覽、跨 Flow 理解與特定主題搜尋。
+- **`getCurrentSelectionSnapshot`** — Reads the currently selected frame and returns node names, node types, text snippets, and basic structural information. It is useful for screen explanation, flow analysis, and happy path / error path breakdowns.
+- **`scanFileOverview`** — Scans the pages and frames in the current file and creates a structured overview. It is useful for product overviews, cross-flow understanding, and topic-based search.
 
 ## Technical Highlights
 
-- **Monorepo + Shared Types** — `packages/shared` 定義 Plugin ↔ Server 的協議型別，兩端 import 同一份型別來源，避免 API contract 只靠人工約定。
-- **Runtime Contract Validation** — `/agent/tools` 會用 shared Zod schema 驗證 tool name、args 與 result payload，避免 plugin / server 邊界只依賴 TypeScript cast。
-- **Planner + Agent 雙層架構** — 使用輕量的 `gpt-4.1-mini` 判斷是否需要 Figma 工具，再由 `gpt-4.1` 根據實際上下文產生回答，避免每次都掃描整份檔案。
-- **Figma Remote Tools** — Plugin Main 負責所有 Figma API 操作，Server 只接收結構化 snapshot，讓權限邊界與職責切分更清楚。
-- **Per-file Session** — Session ID 儲存在 `figma.root.pluginData`，不同 Figma 檔案會自動隔離對話上下文，避免跨檔案混淆。
-- **Modern Figma Plugin Stack** — 使用 Vite、TypeScript、React 與 Tailwind CSS 建置，並將 Plugin UI 打包成單一 HTML inline bundle，符合 Figma Plugin runtime 限制。
+- **Monorepo + Shared Types** — `packages/shared` defines the protocol types between Plugin and Server. Both sides import from the same source to avoid relying on manually synchronized API contracts.
+- **Runtime Contract Validation** — `/agent/tools` validates tool names, args, and result payloads with shared Zod schemas, so the plugin / server boundary does not rely only on TypeScript casts.
+- **Planner + Agent Architecture** — A lightweight `gpt-4.1-mini` planner decides whether Figma tools are needed, then `gpt-4.1` generates responses from the actual context. This avoids scanning the entire file on every request.
+- **Figma Remote Tools** — Plugin Main owns all Figma API operations. The server only receives structured snapshots, keeping permissions and responsibilities clearly separated.
+- **Per-file Session** — The session ID is stored in `figma.root.pluginData`, so conversations are isolated by Figma file and do not leak across files.
+- **Modern Figma Plugin Stack** — Built with Vite, TypeScript, React, and Tailwind CSS. The Plugin UI is bundled into a single inline HTML file to fit the Figma Plugin runtime.
 
-## 專案結構
+## Project Structure
 
 ```text
 .
 ├── apps/
 │   ├── plugin/
 │   │   └── src/
-│   │       ├── main/              # Figma plugin sandbox（讀取 Figma API、呼叫 server）
-│   │       │   ├── figmaTools/    # buildSelectionSnapshot、buildFileOverviewSnapshot
-│   │       │   ├── agentClient.ts # HTTP client，呼叫 server
-│   │       │   └── session.ts     # Per-file session 管理
-│   │       ├── ui/                # React UI（聊天介面）
+│   │       ├── main/              # Figma plugin sandbox (reads Figma API, calls server)
+│   │       │   ├── figmaTools/    # buildSelectionSnapshot, buildFileOverviewSnapshot
+│   │       │   ├── agentClient.ts # HTTP client for calling the server
+│   │       │   └── session.ts     # Per-file session management
+│   │       ├── ui/                # React UI (chat interface)
 │   │       │   ├── components/
 │   │       │   └── hooks/
-│   │       └── shared/            # Plugin 內部 postMessage 型別定義
+│   │       └── shared/            # Plugin-internal postMessage types
 │   └── server/
 │       └── src/
-│           ├── index.ts           # Express 入口（/agent、/agent/tools）
-│           ├── planner.ts         # 意圖判斷，決定是否需要 Figma 工具
-│           ├── agent.ts           # 主 Agent，產生中文流程說明
-│           ├── runtime.ts         # 單輪對話流程控制
-│           ├── toolResults.ts     # 處理 Figma snapshot，組 prompt 並呼叫 Agent
-│           └── session.ts         # Server 端 in-memory session
+│           ├── index.ts           # Express entry (/agent, /agent/tools)
+│           ├── planner.ts         # Intent planning for deciding whether Figma tools are needed
+│           ├── agent.ts           # Main agent that generates Chinese flow explanations
+│           ├── runtime.ts         # Single-turn conversation runtime
+│           ├── toolResults.ts     # Handles Figma snapshots and calls the agent
+│           └── session.ts         # Server-side in-memory sessions
 └── packages/
     └── shared/
         └── src/
-            ├── agentProtocol.ts   # Plugin ↔ Server HTTP 協議型別
-            ├── agentTools.ts      # Figma 工具定義與 Zod schema
-            └── snapshots.ts       # Snapshot 型別（SelectionSnapshot、FileOverviewSnapshot）
+            ├── agentProtocol.ts   # Plugin ↔ Server HTTP protocol types
+            ├── agentTools.ts      # Figma tool definitions and Zod schemas
+            └── snapshots.ts       # Snapshot types (SelectionSnapshot, FileOverviewSnapshot)
 ```
 
-## 本地開發
+## Local Development
 
-### 前置條件
+### Prerequisites
 
 - Node.js 18+
-- OpenAI API Key
+- OpenAI API key
 - Figma Desktop App
 
-### 安裝
+### Install
 
 ```bash
 npm install
 
-# 先建立 shared 套件，讓 server / plugin 可以透過 package exports 讀到型別與 runtime schema
+# Build the shared package first so server / plugin can read types and runtime schemas through package exports
 npm run build --workspace @lumina/shared
 ```
 
-### 設定環境變數
+### Environment Variables
 
-複製 server 範例環境變數：
+Copy the server environment example:
 
 ```bash
 cp apps/server/.env.example apps/server/.env
 ```
 
-在 `apps/server/.env` 填入：
+Fill in `apps/server/.env`:
 
 ```env
 OPENAI_API_KEY=
@@ -175,19 +193,19 @@ PORT=8787
 DEBUG_LUMINA=false
 ```
 
-Plugin 預設會連到 `http://localhost:8787`。如果 server 改用其他 URL，build plugin 前可設定：
+The plugin connects to `http://localhost:8787` by default. If the server uses another URL, set this before building the plugin:
 
 ```bash
 VITE_SERVER_BASE_URL=http://localhost:8787 npm run build --workspace @lumina/plugin
 ```
 
-### 啟動 Server
+### Start Server
 
 ```bash
 npm run dev:server
 ```
 
-Server 預設監聽：
+The server listens on:
 
 ```text
 http://localhost:8787
@@ -195,14 +213,14 @@ http://localhost:8787
 
 ### Build Plugin
 
-一次性 build：
+One-time build:
 
 ```bash
 npm run build --workspace @lumina/shared
 npm run build --workspace @lumina/plugin
 ```
 
-開發模式需要兩個 terminal：
+Development mode requires two terminals:
 
 ```bash
 npm run dev:plugin:main
@@ -212,15 +230,15 @@ npm run dev:plugin:main
 npm run dev:plugin:ui
 ```
 
-### 在 Figma 載入 Plugin
+### Load Plugin in Figma
 
-1. 開啟 Figma Desktop
-2. 前往 **Plugins → Development → Import plugin from manifest**
-3. 選取專案根目錄的 `manifest.json`
+1. Open Figma Desktop
+2. Go to **Plugins → Development → Import plugin from manifest**
+3. Select the root `manifest.json`
 
 ## Build
 
-此專案目前沒有 root-level `build` script。完整 build 可依序執行：
+This project currently does not have a root-level `build` script. To build everything, run:
 
 ```bash
 npm run build --workspace @lumina/shared
@@ -228,24 +246,24 @@ npm run build --workspace @lumina/server
 npm run build --workspace @lumina/plugin
 ```
 
-## 程式碼品質
+## Code Quality
 
 ```bash
-# 型別檢查
+# Type check
 npm run type:check
 
-# 格式化 + Lint 檢查
+# Format + lint checks
 npm run check
 
-# 自動修復
+# Auto-fix
 npm run fix
 ```
 
 ## Roadmap
 
-- [ ] 支援更多 Figma tools
-- [ ] 更完整的 semantic search
-- [ ] 多輪 Flow 理解
-- [ ] 支援 component relationship 分析
-- [ ] 支援多人共享 session context
+- [ ] Support more Figma tools
+- [ ] More complete semantic search
+- [ ] Multi-turn flow understanding
+- [ ] Component relationship analysis
+- [ ] Shared session context for teams
 - [ ] RAG-based large file indexing
